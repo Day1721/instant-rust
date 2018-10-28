@@ -1,0 +1,50 @@
+use std::str::FromStr;
+use ast::{Stmt, Expr, Oper};
+
+grammar;
+
+pub Program = Semicolon<Stmt>;
+
+Semicolon<T>: Vec<T> = {
+    <h:(<T> ";")*> <t:T> => {
+        let mut h = h;
+        h.push(t);
+        h
+    }
+}
+
+pub Stmt: Box<Stmt> = {
+    <Ident> "=" <Expr> => Box::new(Stmt::Ass(<>)),
+    Expr => Box::new(Stmt::Expr(<>)),
+}
+
+LTier<Op, NextTier>: Box<Expr> = {
+    LTier<Op, NextTier> Op NextTier => Box::new(Expr::Op(<>)),
+    NextTier
+}
+RTier<Op, NextTier>: Box<Expr> = {
+    NextTier Op RTier<Op, NextTier> => Box::new(Expr::Op(<>)),
+    NextTier
+}
+
+pub Expr = RTier<AddOp, Minus>;
+AddOp: Oper = "+" => Oper::Add;
+
+Minus = LTier<SubOp, Times>;
+SubOp: Oper = "-" => Oper::Sub;
+
+Times = LTier<TimesOp, Term>;
+TimesOp: Oper = {
+    "*" => Oper::Mul,
+    "/" => Oper::Div,
+}
+
+Term: Box<Expr> = {
+    Num => Box::new(Expr::Num(<>)),
+    Ident => Box::new(Expr::Ident(<>)),
+    "(" <Expr> ")",
+}
+
+
+Ident: String = r"[a-zA-Z][a-zA-Z0-9']*" => <>.to_string();
+Num: i32 = r"[1-9][0-9]*" => i32::from_str(<>).unwrap();
