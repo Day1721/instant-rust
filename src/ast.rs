@@ -25,7 +25,7 @@ impl Debug for Stmt {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         use self::Stmt::*;
         match *self {
-            Ass(ref x, ref e) => write!(f, "{:?} = {:?}", x, e),
+            Ass(ref x, ref e) => write!(f, "{} = {:?}", x, e),
             Expr(ref e) => write!(f, "{:?}", e)
         }
     }
@@ -36,7 +36,7 @@ impl Debug for Expr {
         use self::Expr::*;
         match *self {
             Num(i) => write!(f, "{:?}", i),
-            Ident(ref s) => write!(f, "{:?}", s),
+            Ident(ref s) => write!(f, "{}", s),
             Op(ref l, o, ref r) => write!(f, "({:?} {:?} {:?})", l, o, r)
         }
     }

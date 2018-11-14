@@ -5,6 +5,14 @@ authors = ["Marek Puzyna <puzynamarek97@gmail.com>"]
 
 build = "src/build.rs" # LALRPOP preprocessing
 
+[lib]
+name = "insc"
+path = "src/lib.rs"
+
+[[bin]]
+name = "insc_llvm"
+path = "src/main_llvm.rs"
+
 [dependencies]
 lalrpop-util = "0.16.0"
 regex = "1.0.5"

@@ -13,7 +13,7 @@ Semicolon<T>: Vec<T> = {
     }
 }
 
-pub Stmt: Box<Stmt> = {
+Stmt: Box<Stmt> = {
     <Ident> "=" <Expr> => Box::new(Stmt::Ass(<>)),
     Expr => Box::new(Stmt::Expr(<>)),
 }
@@ -27,7 +27,7 @@ RTier<Op, NextTier>: Box<Expr> = {
     NextTier
 }
 
-pub Expr = RTier<AddOp, Minus>;
+Expr = RTier<AddOp, Minus>;
 AddOp: Oper = "+" => Oper::Add;
 
 Minus = LTier<SubOp, Times>;
